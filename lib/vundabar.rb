@@ -1,4 +1,6 @@
 require "vundabar/version"
+require "utilities"
+require "dependencies"
 
 module Vundabar
   class Application
