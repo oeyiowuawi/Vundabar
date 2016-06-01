@@ -1,4 +1,4 @@
 source "https://rubygems.org"
 
-gem "vundabar"
+gem "vundabar", path: "../../../vundabar"
 gem "pry"

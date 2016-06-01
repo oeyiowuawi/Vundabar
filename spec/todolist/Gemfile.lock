@@ -1,3 +1,10 @@
+PATH
+  remote: ../../../vundabar
+  specs:
+    vundabar (0.1.0)
+      pry
+      rack (~> 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -9,15 +16,13 @@ GEM
       slop (~> 3.4)
     rack (1.6.4)
     slop (3.6.0)
-    vundabar (0.1.0)
-      rack (~> 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   pry
-  vundabar
+  vundabar!
 
 BUNDLED WITH
    1.11.2
