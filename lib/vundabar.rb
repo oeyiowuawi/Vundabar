@@ -1,6 +1,7 @@
 require "vundabar/version"
 require "vundabar/utilities"
 require "vundabar/dependencies"
+require "vundabar/routing/routing"
 require "pry"
 module Vundabar
   class Application
@@ -8,7 +9,7 @@ module Vundabar
     def initialize
       @routes = Routing::Router.new
     end
-    
+
     def call(env)
       @req = Rack::Request.new(env)
       path = @req.path_info
