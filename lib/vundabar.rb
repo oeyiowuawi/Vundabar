@@ -2,6 +2,7 @@ require "vundabar/version"
 require "vundabar/utilities"
 require "vundabar/dependencies"
 require "vundabar/routing/routing"
+require "vundabar/routing/mapper"
 require "pry"
 module Vundabar
   class Application
@@ -11,21 +12,17 @@ module Vundabar
     end
 
     def call(env)
-      @req = Rack::Request.new(env)
-      path = @req.path_info
-      request_method = @req.request_method.downcase
-      return [500, {}, []] if path == '/favicon.ico'
-      controller, action = get_controller_and_action(path, request_method)
-      response = controller.new.send(action)
-      [200, {"Content-type" => "text/html"}, response]
+      request = Rack::Request.new(env)
+      route = mapper.find_route(request)
+      if route
+        [200, {"Content-type" => "text/html"}, ["Yes, it is working"]]
+      else
+        [200, {"Content-type" => "text/html"}, ["Nah, it is not working"]]
+      end
     end
 
-    def get_controller_and_action(path, verb)
-      _, controller, action, others = path.split("/", 4)
-      require "#{controller.downcase}_controller"
-      controller = Object.const_get(controller.capitalize! + "Controller")
-      action = action.nil? ? verb : "#{verb}_#{action}"
-      [controller, action]
+    def mapper
+      @mapper ||= Routing::Mapper.new(routes.endpoints)
     end
 
   end

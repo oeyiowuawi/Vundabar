@@ -9,7 +9,7 @@ module Vundabar
       def find_route(request)
         @request = request
         path = request.path_info
-        method = request.request_method.to_sym
+        method = request.request_method.downcase.to_sym
         matched_route = endpoints[method].find do |endpoint|
           match_path_with_endpoint path, endpoint
         end
@@ -18,7 +18,7 @@ module Vundabar
       def match_path_with_endpoint path, endpoint
         regex, placeholders = endpoint[:pattern]
         if regex =~ path
-          match_data = Regex.last_match
+          match_data = Regexp.last_match
           placeholders.each do |placeholder|
             request.update_param(placeholder, match_data[placeholder])
           end
