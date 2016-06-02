@@ -4,6 +4,11 @@ require "vundabar/dependencies"
 require "pry"
 module Vundabar
   class Application
+    attr_reader :routes
+    def initialize
+      @routes = Routing::Router.new
+    end
+    
     def call(env)
       @req = Rack::Request.new(env)
       path = @req.path_info
@@ -21,5 +26,6 @@ module Vundabar
       action = action.nil? ? verb : "#{verb}_#{action}"
       [controller, action]
     end
+
   end
 end
