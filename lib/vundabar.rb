@@ -3,6 +3,8 @@ require "vundabar/utilities"
 require "vundabar/dependencies"
 require "vundabar/routing/routing"
 require "vundabar/routing/mapper"
+require "vundabar/routing/route"
+require "vundabar/controller"
 require "pry"
 module Vundabar
   class Application
@@ -15,9 +17,10 @@ module Vundabar
       request = Rack::Request.new(env)
       route = mapper.find_route(request)
       if route
-        [200, {"Content-type" => "text/html"}, ["Yes, it is working"]]
+        call_controller_and_action(request, route[:klass_and_method])
+        # [200, {}, ["the path you seek is  available, Old sport "]]
       else
-        [200, {"Content-type" => "text/html"}, ["Nah, it is not working"]]
+        [404, {}, ["OOOPPSSSS!!!, the path you seek is not available, Old sport "]]
       end
     end
 
@@ -25,5 +28,8 @@ module Vundabar
       @mapper ||= Routing::Mapper.new(routes.endpoints)
     end
 
+    def call_controller_and_action(request, klass_and_method)
+      Routing::Route.new(request, klass_and_method).dispatcher
+    end
   end
 end

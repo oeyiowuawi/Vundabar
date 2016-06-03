@@ -10,7 +10,7 @@ module Vundabar
         @request = request
         path = request.path_info
         method = request.request_method.downcase.to_sym
-        matched_route = endpoints[method].find do |endpoint|
+        endpoints[method].find do |endpoint|
           match_path_with_endpoint path, endpoint
         end
       end

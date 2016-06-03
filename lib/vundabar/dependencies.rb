@@ -1,7 +1,6 @@
 class Object
-  def self.const_missing(constant)
-    constant = constant.to_s
-    require constant.to_snake_case
-    constant.to_constant
+  def self.const_missing(const)
+    require const.to_s.to_snake_case
+    Object.const_get(const)
   end
 end
