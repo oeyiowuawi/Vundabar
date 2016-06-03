@@ -9,6 +9,10 @@ module Vundabar
       request.params
     end
 
+    def render
+      
+    end
+
     def controller_name
       klass = self.gsub(/Controller$/, "")
       klass.to_underscore

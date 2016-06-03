@@ -19,6 +19,9 @@ module Vundabar
         end
       end
 
+      def root(address)
+        get "/", to: address
+      end
 
 
       def pattern_for(path)
