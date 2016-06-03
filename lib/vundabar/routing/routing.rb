@@ -23,6 +23,10 @@ module Vundabar
         get "/", to: address
       end
 
+      def resources()
+
+      end
+
 
       def pattern_for(path)
         placeholders = []
@@ -39,7 +43,7 @@ module Vundabar
 
       def controller_and_action(to)
         controller, action = to.split('#')
-        controller = "#{controller.capitalize!}Controller"
+        controller = "#{controller.to_camel_case}Controller"
         [controller, action]
       end
     end

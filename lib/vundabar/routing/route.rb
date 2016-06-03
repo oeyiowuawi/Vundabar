@@ -8,8 +8,8 @@ module Vundabar
       end
 
       def dispatcher
-        controller = controller_name.to_constant 
-        controller.new(request).send(action)
+        controller = controller_name.to_constant.new(request)
+        controller.send(action)
         controller.render(action) unless controller.get_response
         controller.get_response
       end
