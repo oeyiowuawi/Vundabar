@@ -11,7 +11,7 @@ module Vundabar
         define_method(method) do |path, to:|
           path = "/#{path}" unless path[0] == "/"
           route_info = {
-                          # path: path,
+                          path: path,
                           klass_and_method: controller_and_action(to),
                           pattern: pattern_for(path)
                        }
@@ -23,8 +23,15 @@ module Vundabar
         get "/", to: address
       end
 
-      def resources()
-
+      def resources(args)
+        args = args.to_s
+        get("/#{args}", to: "#{args}#index")
+        get("/#{args}/new", to: "#{args}#new")
+        get("/#{args}/:id", to: "#{args}#show")
+        get("/#{args}/edit/:id", to: "#{args}#edit")
+        delete("/#{args}/:id", to: "#{args}#destroy")
+        post("/#{args}/", to: "#{args}#create")
+        put("/#{args}/:id", to: "#{args}#update")
       end
 
 
