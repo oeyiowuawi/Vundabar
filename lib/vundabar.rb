@@ -16,8 +16,8 @@ module Vundabar
       request = Rack::Request.new(env)
       route = mapper.find_route(request)
       if route
-        # call_controller_and_action(request, route[:klass_and_method])
-        [200, {}, ["the path you seek is  available, Old sport "]]
+        call_controller_and_action(request, route[:klass_and_method])
+        # [200, {}, ["the path you seek is  available, Old sport "]]
       else
         [404, {}, ["OOOPPSSSS!!!, the path you seek is not available, Old sport "]]
       end
@@ -28,7 +28,7 @@ module Vundabar
     end
 
     def call_controller_and_action(request, klass_and_method)
-      Routing::Route.new(request, route[:klass_and_method]).dispatcher
+      Routing::Route.new(request, klass_and_method).dispatcher
     end
   end
 end
