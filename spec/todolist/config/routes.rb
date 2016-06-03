@@ -3,5 +3,5 @@ TodoApplication.routes.draw do
   get "/todo/:id/edit", to: "todo#create"
   get "/todolist", to: "todolist#index"
   get "/todolist/:id", to: "todolist#show"
-  get "/rubular/:id", to: "todolist#show"
+  get "/name/about", to: "todolist#lekan"
 end
