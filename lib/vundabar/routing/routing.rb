@@ -34,7 +34,6 @@ module Vundabar
         put("/#{args}/:id", to: "#{args}#update")
       end
 
-
       def pattern_for(path)
         placeholders = []
         new_path = path.gsub(/(:\w+)/) do |match|
