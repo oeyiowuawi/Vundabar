@@ -4,6 +4,7 @@ require "vundabar/dependencies"
 require "vundabar/routing/routing"
 require "vundabar/routing/mapper"
 require "vundabar/routing/route"
+require "vundabar/controller"
 require "pry"
 module Vundabar
   class Application
