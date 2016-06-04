@@ -1,6 +1,5 @@
 require "tilt/erb"
 module Vundabar
-  class ViewObject; end
   class BaseController
     attr_reader :request
     def initialize(request)
