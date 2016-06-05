@@ -26,8 +26,8 @@ module Vundabar
       layout_template, view_template = prepare_view_template(view_name)
       title = view_name.to_s.tr("_", " ").capitalize
       view_object = get_view_object
-      layout_template.render(self, title: title) do
-        view_template.render(self, locals)
+      layout_template.render(view_object, title: title) do
+        view_template.render(view_object, locals)
       end
     end
 
