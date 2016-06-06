@@ -20,6 +20,6 @@ class TodolistController < Vundabar::BaseController
   end
 
   def lekan
-    @name = "lekan"
+    @name = "Adebare"
   end
 end
