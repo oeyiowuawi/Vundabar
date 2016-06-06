@@ -6,7 +6,6 @@ module Vundabar
         instance_eval &block
       end
 
-
       [:get, :post, :delete, :put, :patch].each do |method|
         define_method(method) do |path, to:|
           path = "/#{path}" unless path[0] == "/"
