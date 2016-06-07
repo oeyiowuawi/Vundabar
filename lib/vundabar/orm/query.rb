@@ -1,4 +1,4 @@
-module ActiveRecord
+module Vundabar
   class Queries
     def save
       query = "INSERT INTO #{@@table} (#{table_column}) VALUES #{record_placeholders}"
@@ -6,7 +6,7 @@ module ActiveRecord
     end
 
     def execute_querry(querry, values = nil)
-      return  @@db.execute querry, values if values 
+      return  @@db.execute querry, values if values
       @@db.execute querry
     end
   end

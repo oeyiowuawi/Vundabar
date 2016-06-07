@@ -1,7 +1,7 @@
 require "database_connector"
-module Vundabar
-  module ActiveRecord
-    class BaseModel
+require "querry"
+  module Vundabar
+    class BaseModel < Queries
       @@table = ""
       @@properties = {}
       @@db ||= Database.connect
@@ -66,4 +66,3 @@ module Vundabar
 
     end
   end
-end
