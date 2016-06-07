@@ -6,12 +6,11 @@ module Vundabar
         instance_eval &block
       end
 
-
       [:get, :post, :delete, :put, :patch].each do |method|
         define_method(method) do |path, to:|
           path = "/#{path}" unless path[0] == "/"
           route_info = {
-                          # path: path,
+                          path: path,
                           klass_and_method: controller_and_action(to),
                           pattern: pattern_for(path)
                        }
@@ -19,13 +18,26 @@ module Vundabar
         end
       end
 
-      
+      def root(address)
+        get "/", to: address
+      end
+
+      def resources(args)
+        args = args.to_s
+        get("/#{args}", to: "#{args}#index")
+        get("/#{args}/new", to: "#{args}#new")
+        get("/#{args}/:id", to: "#{args}#show")
+        get("/#{args}/edit/:id", to: "#{args}#edit")
+        delete("/#{args}/:id", to: "#{args}#destroy")
+        post("/#{args}/", to: "#{args}#create")
+        put("/#{args}/:id", to: "#{args}#update")
+      end
 
       def pattern_for(path)
         placeholders = []
         new_path = path.gsub(/(:\w+)/) do |match|
           placeholders << match[1..-1].freeze
-          "(?<#{placeholders.last}>[^#?/]+)"
+          "(?<#{placeholders.last}>[^?/#]+)"
         end
         [/^#{new_path}$/, placeholders]
       end
@@ -36,7 +48,7 @@ module Vundabar
 
       def controller_and_action(to)
         controller, action = to.split('#')
-        controller = "#{controller.capitalize!}Controller"
+        controller = "#{controller.to_camel_case}Controller"
         [controller, action]
       end
     end

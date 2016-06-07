@@ -9,7 +9,7 @@ class String
   end
 
   def to_camel_case
-    return self if self !~ /_/ && self =~ /[A-z]+.*/
+    return self if self !~ /_/ && self =~ /[A-Z]+.*/
     split("_").map {|string| string.capitalize}.join
   end
 

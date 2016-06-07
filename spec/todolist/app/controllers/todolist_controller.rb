@@ -1,4 +1,4 @@
-class TodolistController
+class TodolistController < Vundabar::BaseController
   def get
     "['Write a book', 'Build a house', 'Get married', 'Buy a car']"
   end
@@ -17,5 +17,9 @@ class TodolistController
 
   def delete
     "Delete Write a book"
+  end
+
+  def lekan
+    @name = "Adebare"
   end
 end
