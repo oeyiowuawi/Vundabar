@@ -19,6 +19,16 @@ module Vundabar
       columns.map(&:to_s).join(", ")
     end
 
+    def update_placeholders(attributes = @@properties)
+      columns = attributes.keys
+      columns.delete(:id)
+      columns.map { |column| "#{attribute}= ?" }
+    end
+
+    def update_values(attributes)
+      attributes.values << id
+    end
+
     def self.create_table
       query = "CREATE TABLE IF NOT EXISTS #{@@table} (#{build_table_fields(@@properties).join(", ")})"
       @@db.execute(query)
