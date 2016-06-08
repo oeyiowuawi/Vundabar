@@ -26,13 +26,9 @@ class TodolistController < Vundabar::BaseController
     "Delete Write a book"
   end
 
-  def lekan
-    lekan = Todo.new
-    lekan.title = "dope boy"
-    lekan.body = "a rare gem, no puns intended"
-    lekan.status = "done"
-    lekan.created_at = Time.now.to_s
-    lekan.save
-    @name = "Adebare"
+  def new
+    lekan = Todo.find(2)
+    lekan.update(title: "Pedro Lopez", body: "Mi casa, su casa", status: "done", created_at: Time.now.to_s)
+    @name = "Olalekan"
   end
 end

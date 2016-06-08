@@ -22,7 +22,7 @@ module Vundabar
     def update_placeholders(attributes = @@properties)
       columns = attributes.keys
       columns.delete(:id)
-      columns.map { |column| "#{attribute}= ?" }
+      columns.map { |column| "#{column}= ?" }.join(", ")
     end
 
     def update_values(attributes)

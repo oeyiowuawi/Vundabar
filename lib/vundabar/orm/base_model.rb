@@ -2,7 +2,7 @@
     class BaseModel < Vundabar::ModelHelper
       def save
         query = if id
-                  "UPDATE #{@@table} SET #{update_placeholders} WHERE id= ?"
+                  "UPDATE #{@@table} SET #{update_placeholders} WHERE id = ?"
                 else
                   "INSERT INTO #{@@table} (#{table_columns}) VALUES "\
                   "(#{record_placeholders})"
