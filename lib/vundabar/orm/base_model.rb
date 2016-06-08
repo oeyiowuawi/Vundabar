@@ -27,5 +27,19 @@
         query = "UPDATE #{@@table} SET #{update_placeholders(attributes)} WHERE id= ?"
         @@db.execute(query, update_values(attributes))
       end
+
+      def destroy
+        query = "DELETE FROM #{@@table} WHERE id= ?"
+        @@db.execute(query, id)
+      end
+
+      def self.destroy(id)
+        query = "DELETE FROM #{@@table} WHERE id= ?"
+        @@db.execute(query, id)
+      end
+
+      def self.destroy_all
+        @@db.execute "DELETE FROM #{@@table}"
+      end
     end
   end
