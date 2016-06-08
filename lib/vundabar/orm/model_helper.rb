@@ -53,6 +53,14 @@ module Vundabar
       "NOT NULL" unless value
     end
 
+    def self.get_model_object(result)
+      model_name = new
+      @@properties.keys.each_with_index do |key, index|
+        model_name.send("#{key}=", result[index])
+      end
+      model_name
+    end
+
     def record_placeholders
       (["?"] * ((@@properties.keys.size) - 1)).join(",")
     end

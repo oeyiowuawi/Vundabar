@@ -5,8 +5,13 @@
         execute_querry(query, record_values)
       end
 
+      def self.all
+        query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} ORDER BY id DESC"
+        result = execute_query query
+        get_model_object(result)
+      end
 
-      def execute_querry(query, values = nil)
+      def execute_query(query, values = nil)
         return  @@db.execute query, values if values
         @@db.execute query
       end
