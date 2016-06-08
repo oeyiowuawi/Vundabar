@@ -20,6 +20,12 @@ class TodolistController < Vundabar::BaseController
   end
 
   def lekan
+    lekan = Todo.new
+    lekan.title = "dope boy"
+    lekan.body = "a rare gem, no puns intended"
+    lekan.status = "done"
+    lekan.created_at = Time.now.to_s
+    lekan.save
     @name = "Adebare"
   end
 end
