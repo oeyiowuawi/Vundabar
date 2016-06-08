@@ -53,11 +53,13 @@ module Vundabar
       "NOT NULL" unless value
     end
 
-    def self.get_model_object(result)
+    def self.get_model_object(row)
       model_name = new
-      @@properties.keys.each_with_index do |key, index|
-        model_name.send("#{key}=", result[index])
-      end
+      # if row
+        @@properties.keys.each_with_index do |key, index|
+          model_name.send("#{key}=", row[index])
+        end
+      # end
       model_name
     end
 

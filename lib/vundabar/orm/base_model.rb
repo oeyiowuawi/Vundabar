@@ -2,18 +2,19 @@
     class BaseModel < Vundabar::ModelHelper
       def save
         query = "INSERT INTO #{@@table} (#{table_columns}) VALUES (#{record_placeholders})"
-        execute_querry(query, record_values)
+        @@db.execute query, record_values
       end
 
       def self.all
         query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} ORDER BY id DESC"
-        result = execute_query query
-        get_model_object(result)
+        result = @@db.execute query
+        result.map{|row| get_model_object(row)}
       end
 
-      def execute_query(query, values = nil)
-        return  @@db.execute query, values if values
-        @@db.execute query
+      def self.find(id)
+        query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} WHERE id= ?"
+        row = @@db.execute(query, id).first
+        get_model_object(row)
       end
     end
   end

@@ -3,8 +3,15 @@ class TodolistController < Vundabar::BaseController
     "['Write a book', 'Build a house', 'Get married', 'Buy a car']"
   end
 
-  def get_first
-    "Write a book"
+  def get_all
+  end
+
+  def index
+    @todos = Todo.all
+  end
+
+  def show
+    @todo = Todo.find(params["id"])
   end
 
   def post
