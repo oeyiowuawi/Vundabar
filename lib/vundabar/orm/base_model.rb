@@ -1,5 +1,9 @@
   module Vundabar
     class BaseModel < Vundabar::ModelHelper
+      def initialize(attributes = {})
+        attributes.each {|column, value| send("#{column}=", value)}
+      end
+      
       def save
         query = if id
                   "UPDATE #{@@table} SET #{update_placeholders} WHERE id = ?"
@@ -15,6 +19,13 @@
         query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} ORDER BY id DESC"
         result = @@db.execute query
         result.map{|row| get_model_object(row)}
+      end
+
+      def self.create(attributes)
+        placeholders = (["?"] * attributes.keys.size).join(',')
+        columns = attributes.keys.map(&:to_s).join(",")
+        query = "INSERT INTO #{@@table} (#{columns}) VALUES (#{placeholders})"
+        @@db.execute query, attributes.values
       end
 
       def self.find(id)

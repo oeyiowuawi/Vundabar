@@ -27,7 +27,13 @@ class TodolistController < Vundabar::BaseController
   end
 
   def new
-    # lekan = Todo.find(2)
+    # l = Todo.new({title: "real", body: "meatball", status: "done", created_at: Time.now.to_s})
+    l = Todo.new
+    l.title = "jamaica"
+    l.body = "lovely"
+    l.status = "done"
+    l.created_at = Time.now.to_s
+    l.save
     # lekan.update(title: "Pedro Lopez", body: "Mi casa, su casa", status: "done", created_at: Time.now.to_s)
     @name = "Olalekan"
   end
