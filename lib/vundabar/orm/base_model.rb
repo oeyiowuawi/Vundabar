@@ -1,53 +1,56 @@
-require "database_connector"
-module Vundabar
-  module ActiveRecord
-    class BaseModel
-      @@table = ""
-      @@properties = {}
-      @@db ||= Database.connect
-
-      def self.to_table(name)
-        @@table = name.to_s
+  module Vundabar
+    class BaseModel < Vundabar::ModelHelper
+      def initialize(attributes = {})
+        attributes.each {|column, value| send("#{column}=", value)}
+      end
+      
+      def save
+        query = if id
+                  "UPDATE #{@@table} SET #{update_placeholders} WHERE id = ?"
+                else
+                  "INSERT INTO #{@@table} (#{table_columns}) VALUES "\
+                  "(#{record_placeholders})"
+                end
+        values = id ? record_values << send("id") : record_values
+        @@db.execute query, values
       end
 
-      def self.property column_name, column_properties
-        @@properties[column_name] = column_properties
-        attr_accessor column_name
+      def self.all
+        query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} ORDER BY id DESC"
+        result = @@db.execute query
+        result.map{|row| get_model_object(row)}
       end
 
-      def self.create_table
-        query = "CREATE TABLE IF NOT EXISTS #{@@table} (#{build_table_fields(@@properties).join(", "))}"
+      def self.create(attributes)
+        placeholders = (["?"] * attributes.keys.size).join(',')
+        columns = attributes.keys.map(&:to_s).join(",")
+        query = "INSERT INTO #{@@table} (#{columns}) VALUES (#{placeholders})"
+        @@db.execute query, attributes.values
       end
 
-      def self.build_table_fields(properties)
-        all_properties = []
-        column = []
-        properties.each do |field_name, constraints|
-          column << field_name.to_s
-          parse_constraint(constraints, column)
-          all_properties << column.join(" ")
-        end
+      def self.find(id)
+        query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} WHERE id= ?"
+        row = @@db.execute(query, id).first
+        get_model_object(row)
       end
 
-      def parse_constraint(constraints, column)
-        constraints.each do |attribute, value|
-          column << send(attribute.to_s, value)
-        end
+      def update(attributes)
+        query = "UPDATE #{@@table} SET #{update_placeholders(attributes)} WHERE id= ?"
+        @@db.execute(query, update_values(attributes))
       end
 
-      def self.type(value)
-        value.to_s
+      def destroy
+        query = "DELETE FROM #{@@table} WHERE id= ?"
+        @@db.execute(query, id)
       end
 
-      def self.primary_key(value)
-        "PRIMARY KEY AUTOINCREMENT" if value
+      def self.destroy(id)
+        query = "DELETE FROM #{@@table} WHERE id= ?"
+        @@db.execute(query, id)
       end
 
-      def self.nullable(value)
-        "NOT NULL" if value
+      def self.destroy_all
+        @@db.execute "DELETE FROM #{@@table}"
       end
-
-
     end
   end
-end
