@@ -10,6 +10,10 @@ module Vundabar
       request.params
     end
 
+    def redirect_to (address, status: 301)
+      response([], status, "Location" => address)
+    end
+
     def render(*args)
       response(render_template(*args))
     end
