@@ -10,6 +10,10 @@ module Vundabar
       request.params
     end
 
+    def redirect_to (address, status: 301)
+      response([], status, "Location" => address)
+    end
+
     def render(*args)
       response(render_template(*args))
     end
@@ -20,6 +24,12 @@ module Vundabar
 
     def get_response
       @response
+    end
+
+    def invalid_route(endpoints)
+      template = File.join(APP_ROOT, "public", "invalid_route.html.erb")
+      locals = {path: request.path_info, endpoints: endpoints}
+      Tilt::ERBTemplate.new(template).render(self, locals)
     end
 
     def render_template view_name, locals = {}

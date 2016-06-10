@@ -23,7 +23,8 @@ module Vundabar
       if route
         call_controller_and_action(request, route[:klass_and_method])
       else
-        [404, {}, ["OOOPPSSSS!!!, the path you seek is not available, Old sport "]]
+        # [404, {}, ["OOOPPSSSS!!!, the path you seek is not available, Old sport "]]
+        invalid_route_processor(request)
       end
     end
 
@@ -33,6 +34,11 @@ module Vundabar
 
     def call_controller_and_action(request, klass_and_method)
       Routing::Route.new(request, klass_and_method).dispatcher
+    end
+
+    def invalid_route_processor(request)
+      response = BaseController.new(request).invalid_route(routes.endpoints)
+      [404, {}, [response]]
     end
   end
 end

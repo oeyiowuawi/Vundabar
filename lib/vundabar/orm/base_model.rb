@@ -3,7 +3,7 @@
       def initialize(attributes = {})
         attributes.each {|column, value| send("#{column}=", value)}
       end
-      
+
       def save
         query = if id
                   "UPDATE #{@@table} SET #{update_placeholders} WHERE id = ?"
@@ -22,15 +22,15 @@
       end
 
       def self.create(attributes)
-        placeholders = (["?"] * attributes.keys.size).join(',')
-        columns = attributes.keys.map(&:to_s).join(",")
-        query = "INSERT INTO #{@@table} (#{columns}) VALUES (#{placeholders})"
-        @@db.execute query, attributes.values
+        object = new(attributes)
+        object.save
+        object
       end
 
       def self.find(id)
         query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} WHERE id= ?"
         row = @@db.execute(query, id).first
+        return nil unless row
         get_model_object(row)
       end
 
