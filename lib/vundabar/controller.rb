@@ -26,6 +26,12 @@ module Vundabar
       @response
     end
 
+    def invalid_route(endpoints)
+      template = File.join(APP_ROOT, "public", "invalid_route.html.erb")
+      locals = {path: request.path_info, endpoints: endpoints}
+      Tilt::ERBTemplate.new(template).render(self, locals)
+    end
+
     def render_template view_name, locals = {}
       layout_template, view_template = prepare_view_template(view_name)
       title = view_name.to_s.tr("_", " ").capitalize

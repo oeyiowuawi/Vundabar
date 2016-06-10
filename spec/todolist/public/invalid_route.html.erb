@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset= "UTF-8">
+  <title>Invalid Route</title>
+  <style >
+  body {
+    background-color: #ffffff;
+    color: #2E2F30;
+    text-align: center;
+    font-family: arial, sans-serif;
+    margin: 0;
+  }
+  div.error_box {
+    margin: auto;
+    font-weight: bolder;
+    width: 60%;
+    border: 3px solid #ff3333;
+    padding: 10px;
+    background-color: #ff3333;
+    margin-top: 5%;
+
+  }
+
+  </style>
+</head>
+<body>
+  <div class="error_box">
+  OOOPPSSSS!!!, the path "<%= path %>", you seek is not available, Old sport Check the list f the available paths and choose your path.
+  </div>
+
+  <div class="routes-list">
+    <% endpoints.each do |method, route_info| %>
+    
+    <%end %>
+  </div>
+</body>
+</html>
