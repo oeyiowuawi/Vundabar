@@ -1,15 +1,13 @@
 require "spec_helper"
-
-RSpec.descibe BaseModel do
-  after(:each) do
-    TestModel.destroy_all
-  end
-
+RSpec.describe Vundabar::BaseModel do
   describe ".all" do
     before(:all) do
       create_seed 4
     end
 
+    after(:all) do
+      TestModel.destroy_all
+    end
     it "returns all the records in the database" do
       expect(TestModel.all.count).to eq 4
     end
@@ -19,9 +17,8 @@ RSpec.descibe BaseModel do
     end
 
     it "returns objects as elements of the array" do
-      expect(TestModel.all[0]).to be TestModel
-      expect(TestModel.all[-1]).to be TestModel
+      expect(TestModel.all[0]).to be_an_instance_of TestModel
+      expect(TestModel.all[-1]).to be_an_instance_of TestModel
     end
-    
   end
 end
