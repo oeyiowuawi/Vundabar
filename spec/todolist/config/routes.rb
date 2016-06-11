@@ -4,5 +4,6 @@ TodoApplication.routes.draw do
   # get "/todolist", to: "todolist#index"
   # get "/todolist/:id", to: "todolist#show"
   # get "/name/about", to: "todolist#lekan"
+  root "todolist#index"
   resources :todolist
 end
