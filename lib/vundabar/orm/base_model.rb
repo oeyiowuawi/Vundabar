@@ -24,7 +24,28 @@
       def self.create(attributes)
         object = new(attributes)
         object.save
+        id = @@db.execute "SELECT last_insert_rowid()"
+        object.id = id.first.first
         object
+      end
+
+      def self.last
+        query = "SELECT * FROM #{@@table} ORDER BY id DESC LIMIT 1"
+        row = @@db.execute query
+        return nil if row.empty?
+        get_model_object(row.first)
+      end
+
+      def self.first
+        query = "SELECT * FROM #{@@table} ORDER BY id ASC LIMIT 1"
+        row = @@db.execute query
+        return nil if row.empty?
+        get_model_object(row.first)
+      end
+
+      def self.count
+        result = @@db.execute "SELECT COUNT(*) FROM #{@@table}"
+        result.first.first
       end
 
       def self.find(id)
