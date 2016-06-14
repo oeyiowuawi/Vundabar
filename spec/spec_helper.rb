@@ -8,4 +8,12 @@ require 'rack/test'
 require "support/base_model_helper"
 require "support/test_seed"
 
-ENV['RACK_ENV'] = 'test'
+RSpec.shared_context type: :feature do
+  require "capybara/rspec"
+  before(:all) do
+    app = Rack::Builder.parse_file(
+      "#{__dir__}/todolist/config.ru"
+    ).first
+    Capybara.app = app
+  end
+end
