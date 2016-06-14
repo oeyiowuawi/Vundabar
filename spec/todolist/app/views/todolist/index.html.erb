@@ -1,4 +1,4 @@
-  <div class="row">
+  <!-- <div class="row">
 <h4>Lists of all your Todos</h4>
 <table class="center">
   <% @todos.each do |todo| %>
@@ -19,4 +19,48 @@
 <% end%>
 
 </table>
+</div> -->
+<div class="row text-center">
+<h3>  <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>  TODOLIST </h3>
+<hr />
+</div>
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> Pending Todos</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item">Cras justo odio
+              <form action="/todo/1"  method="post" class="pull-right">
+              <input type="hidden" class="form-control" name="_method" value ="delete" />
+              <button class="btn btn-sm  btn-danger delete"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
+            </form><a href="/todo/1/edit" class="btn btn-sm pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
+            <li class="list-group-item">Dapibus ac facilisis in</li>
+            <li class="list-group-item">Morbi leo risus</li>
+            <li class="list-group-item">Porta ac consectetur ac</li>
+            <li class="list-group-item">Vestibulum at eros</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Completed Todos</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item">Dapibus ac facilisis in<span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></li>
+          <li class="list-group-item">Morbi leo risus<span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></li>
+          <li class="list-group-item">Porta ac consectetur ac<span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></li>
+          <li class="list-group-item">Vestibulum at eros<span class="glyphicon glyphicon-remove-circle pull-right" aria-hidden="true"></li>
+        </ul>
+      </div>
+    </div>
+    </div>
+  </div>
 </div>
