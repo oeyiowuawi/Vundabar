@@ -73,5 +73,11 @@
       def self.destroy_all
         @@db.execute "DELETE FROM #{@@table}"
       end
+
+      def self.where(querry_string, value)
+        data = @@db.execute "SELECT #{@@properties.keys.join(', ')} FROM "\
+        "#{@@table} WHERE #{querry_string}", value
+        data.map {|row| get_model_object(row)}
+      end
     end
   end

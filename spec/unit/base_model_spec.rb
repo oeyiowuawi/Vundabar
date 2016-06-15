@@ -194,4 +194,18 @@ RSpec.describe Vundabar::BaseModel do
       end
     end
   end
+  describe ".where" do
+     after(:all) do
+       TestModel.destroy_all
+     end
+
+     it "returns matching records" do
+       pending_task = TestModel.create(name: "Iniesta", age: "32")
+       completed_todo = TestModel.create(name: "Sergio", age: "27")
+       expect(TestModel.where("name like ?", "%iniesta").first.name).to eq(
+         pending_task.name
+       )
+
+     end
+   end
 end
