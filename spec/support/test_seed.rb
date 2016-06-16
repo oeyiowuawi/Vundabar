@@ -1,8 +1,9 @@
-  def create_seed(n = 1)
+  def create_seed(n = 1, status = "done")
     (1..n).each do |i|
-      todo = TestModel.new
-      todo.name = "name#{i}"
-      todo.age = (20..45).to_a.sample
+      todo = Todo.new
+      todo.title = Faker::Lorem.word
+      todo.body = Faker::Lorem.sentence
+      todo.status = status
       todo.save
     end
   end

@@ -27,9 +27,9 @@ module Vundabar
         get("/#{args}", to: "#{args}#index")
         get("/#{args}/new", to: "#{args}#new")
         get("/#{args}/:id", to: "#{args}#show")
-        get("/#{args}/edit/:id", to: "#{args}#edit")
+        get("/#{args}/:id/edit", to: "#{args}#edit")
         delete("/#{args}/:id", to: "#{args}#destroy")
-        post("/#{args}/", to: "#{args}#create")
+        post("/#{args}/create", to: "#{args}#create")
         put("/#{args}/:id", to: "#{args}#update")
       end
 

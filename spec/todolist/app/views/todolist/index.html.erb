@@ -1,22 +1,51 @@
-  <div class="row">
-<h4>Lists of all your Todos</h4>
-<table class="center">
-  <% @todos.each do |todo| %>
-<tr>
-  <td>
-    <%= todo.title %>
-  </td>
-  <td>
-    <%= todo.body %>
-  </td>
-  <td>
-  <%= todo.status %>
-  </td>
-  <td>
-    <%= todo.created_at %>
-  </td>
-</tr>
-<% end%>
 
-</table>
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span> Pending Todos</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <% if @pendings.empty? %>
+            <li class="list-group-item" >No pending tasks</li>
+            <% else %>
+            <div id="pending-todo">
+            <% @pendings.each do |pending|%>
+            <li class="list-group-item"><%= pending.title %>
+              <form action="/todolist/<%= pending.id %>"  method="post" class="pull-right">
+              <input type="hidden" class="form-control" name="_method" value ="delete" />
+              <button class="btn btn-sm  btn-danger delete" style="margin-left: 8px"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
+            </form><a href="/todolist/<%= pending.id %>/edit" class="btn btn-sm btn-info pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
+            <% end %>
+          </div>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default completed-todo">
+      <div class="panel-heading">
+        <h3 class="panel-title"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Completed Todos</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% if @completed.empty? %>
+          <li class="list-group-item">No completed tasks</li>
+          <% else %>
+          <% @completed.each do |completed|%>
+          <li class="list-group-item"><%= completed.title %><form action="/todolist/<%= completed.id %>"  method="post" class="pull-right">
+          <input type="hidden" class="form-control" name="_method" value ="delete" />
+          <button class="btn btn-sm  btn-danger delete" style="margin-left: 8px"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
+        </form><a href="/todolist/<%= completed.id %>/edit" class="btn btn-sm btn-info pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
+          <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+    </div>
+  </div>
 </div>

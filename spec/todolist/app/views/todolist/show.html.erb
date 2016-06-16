@@ -1,7 +1,24 @@
-<html>
-  <head>
-  </head>
-  <body>
-      <p> <%= @todo.body %> </p>
-  </body>
-</html>
+<div class="col-md-12">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title text-center"><%= @todo.title.capitalize %></h3>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group">
+            <li class="list-group-item">Status: <%= @todo.status %></li>
+            <li class="list-group-item">Body: <%= @todo.body %></li>
+            <li class="list-group-item">Created at: <%= @todo.created_at %></li>
+          </ul>
+          <form action="/todolist/<%= @todo.id %>"  method="post" class="pull-right">
+          <input type="hidden" class="form-control" name="_method" value ="delete" />
+          <button class="btn btn-sm  btn-danger delete">Delete</button>
+          &nbsp;
+          <a href="/todolist/<%= @todo.id %>/edit" class="btn btn-sm btn-info pull-right"> Edit </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
