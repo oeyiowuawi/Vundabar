@@ -9,15 +9,17 @@
         <div class="panel-body">
           <ul class="list-group">
             <% if @pendings.empty? %>
-            <li class="list-group-item">No pending tasks</li>
+            <li class="list-group-item" >No pending tasks</li>
             <% else %>
+            <div id="pending-todo">
             <% @pendings.each do |pending|%>
             <li class="list-group-item"><%= pending.title %>
-              <form action="/todo/<%= pending.id %>"  method="post" class="pull-right">
+              <form action="/todolist/<%= pending.id %>"  method="post" class="pull-right">
               <input type="hidden" class="form-control" name="_method" value ="delete" />
               <button class="btn btn-sm  btn-danger delete" style="margin-left: 8px"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
             </form><a href="/todolist/<%= pending.id %>/edit" class="btn btn-sm btn-info pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
             <% end %>
+          </div>
             <% end %>
           </ul>
         </div>
@@ -25,7 +27,7 @@
 
     </div>
     <div class="col-md-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default completed-todo">
       <div class="panel-heading">
         <h3 class="panel-title"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Completed Todos</h3>
       </div>
@@ -35,7 +37,7 @@
           <li class="list-group-item">No completed tasks</li>
           <% else %>
           <% @completed.each do |completed|%>
-          <li class="list-group-item"><%= completed.title %><form action="/todo/<%= completed.id %>"  method="post" class="pull-right">
+          <li class="list-group-item"><%= completed.title %><form action="/todolist/<%= completed.id %>"  method="post" class="pull-right">
           <input type="hidden" class="form-control" name="_method" value ="delete" />
           <button class="btn btn-sm  btn-danger delete" style="margin-left: 8px"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
         </form><a href="/todolist/<%= completed.id %>/edit" class="btn btn-sm btn-info pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>

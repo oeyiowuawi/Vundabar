@@ -15,6 +15,8 @@
         @@db.execute query, values
       end
 
+      alias save! save
+
       def self.all
         query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} ORDER BY id DESC"
         result = @@db.execute query

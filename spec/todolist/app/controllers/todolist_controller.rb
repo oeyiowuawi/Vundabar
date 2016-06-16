@@ -29,7 +29,6 @@ class TodolistController < Vundabar::BaseController
   end
 
   def create
-    binding.pry
     todo = Todo.create(required_params)
     redirect_to "/todolist/#{todo.id}"
   end
