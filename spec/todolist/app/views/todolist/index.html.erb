@@ -15,8 +15,8 @@
             <li class="list-group-item"><%= pending.title %>
               <form action="/todo/<%= pending.id %>"  method="post" class="pull-right">
               <input type="hidden" class="form-control" name="_method" value ="delete" />
-              <button class="btn btn-sm  btn-danger delete"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
-            </form><a href="/todo/<%= pending.id %>/edit" class="btn btn-sm pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
+              <button class="btn btn-sm  btn-danger delete" style="margin-left: 8px"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
+            </form><a href="/todolist/<%= pending.id %>/edit" class="btn btn-sm btn-info pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
             <% end %>
             <% end %>
           </ul>
@@ -37,8 +37,8 @@
           <% @completed.each do |completed|%>
           <li class="list-group-item"><%= completed.title %><form action="/todo/<%= completed.id %>"  method="post" class="pull-right">
           <input type="hidden" class="form-control" name="_method" value ="delete" />
-          <button class="btn btn-sm  btn-danger delete"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
-          </form></li>
+          <button class="btn btn-sm  btn-danger delete" style="margin-left: 8px"><span class="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span></button>
+        </form><a href="/todolist/<%= completed.id %>/edit" class="btn btn-sm btn-info pull-right"> <span class="glyphicon glyphicon-edit pull-right " aria-hidden="true"></a></span></li>
           <% end %>
           <% end %>
         </ul>

@@ -9,7 +9,7 @@ class TodolistController < Vundabar::BaseController
     @todo = Todo.find(params["id"])
   end
 
-  def delete
+  def destroy
     todo = Todo.find(params["id"])
     todo.destroy
     redirect_to "/todolist"
@@ -17,7 +17,11 @@ class TodolistController < Vundabar::BaseController
 
   def update
     todo = Todo.find(params["id"])
-    todo.update(required_params)
+    todo.update(
+    title: params["title"],
+    body: params["body"],
+    status: params["status"]
+    )
     redirect_to "/todolist/#{todo.id}"
   end
 
