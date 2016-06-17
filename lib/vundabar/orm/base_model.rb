@@ -1,85 +1,100 @@
-  module Vundabar
-    class BaseModel < Vundabar::ModelHelper
-      def initialize(attributes = {})
-        attributes.each {|column, value| send("#{column}=", value)}
+module Vundabar
+  class BaseModel < Vundabar::ModelHelper
+    class << self
+      attr_accessor :properties, :db
+    end
+
+    def initialize(attributes = {})
+      attributes.each { |column, value| send("#{column}=", value) }
+    end
+
+    def self.to_table(name)
+      @table = name.to_s
+    end
+
+    def self.table_name
+      @table
+    end
+
+    def self.property(column_name, column_properties)
+      @properties ||= {}
+      @properties[column_name] = column_properties
+      attr_accessor column_name
+    end
+
+    def self.properties_keys
+      @properties.keys
+    end
+
+    def table_columns
+      columns = self.class.properties_keys
+      columns.delete(:id)
+      columns.map(&:to_s).join(", ")
+    end
+
+    def update_placeholders(attributes = self.class.properties)
+      columns = attributes.keys
+      columns.delete(:id)
+      columns.map { |column| "#{column}= ?" }.join(", ")
+    end
+
+    def update_values(attributes)
+      attributes.values << id
+    end
+
+    def self.create_table
+      @db ||= Vundabar::Database.connect
+      query = "CREATE TABLE IF NOT EXISTS #{table_name} "\
+        "(#{build_table_fields(@properties).join(', ')})"
+      db.execute(query)
+    end
+
+    def self.build_table_fields(properties)
+      all_properties = []
+      properties.each do |field_name, constraints|
+        column = []
+        column << field_name.to_s
+        parse_constraint(constraints, column)
+        all_properties << column.join(" ")
       end
+      all_properties
+    end
 
-      def save
-        query = if id
-                  "UPDATE #{@@table} SET #{update_placeholders} WHERE id = ?"
-                else
-                  "INSERT INTO #{@@table} (#{table_columns}) VALUES "\
-                  "(#{record_placeholders})"
-                end
-        values = id ? record_values << send("id") : record_values
-        @@db.execute query, values
-      end
-
-      alias save! save
-
-      def self.all
-        query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} ORDER BY id DESC"
-        result = @@db.execute query
-        result.map{|row| get_model_object(row)}
-      end
-
-      def self.create(attributes)
-        object = new(attributes)
-        object.save
-        id = @@db.execute "SELECT last_insert_rowid()"
-        object.id = id.first.first
-        object
-      end
-
-      def self.last
-        query = "SELECT * FROM #{@@table} ORDER BY id DESC LIMIT 1"
-        row = @@db.execute query
-        return nil if row.empty?
-        get_model_object(row.first)
-      end
-
-      def self.first
-        query = "SELECT * FROM #{@@table} ORDER BY id ASC LIMIT 1"
-        row = @@db.execute query
-        return nil if row.empty?
-        get_model_object(row.first)
-      end
-
-      def self.count
-        result = @@db.execute "SELECT COUNT(*) FROM #{@@table}"
-        result.first.first
-      end
-
-      def self.find(id)
-        query = "SELECT #{@@properties.keys.join(', ')} FROM #{@@table} WHERE id= ?"
-        row = @@db.execute(query, id).first
-        return nil unless row
-        get_model_object(row)
-      end
-
-      def update(attributes)
-        query = "UPDATE #{@@table} SET #{update_placeholders(attributes)} WHERE id= ?"
-        @@db.execute(query, update_values(attributes))
-      end
-
-      def destroy
-        query = "DELETE FROM #{@@table} WHERE id= ?"
-        @@db.execute(query, id)
-      end
-
-      def self.destroy(id)
-        query = "DELETE FROM #{@@table} WHERE id= ?"
-        @@db.execute(query, id)
-      end
-
-      def self.destroy_all
-        @@db.execute "DELETE FROM #{@@table}"
-      end
-
-      def self.where(querry_string, value)
-        data = @@db.execute "SELECT #{@@properties.keys.join(', ')} FROM "\
-        "#{@@table} WHERE #{querry_string}", value
-        data.map {|row| get_model_object(row)}
+    def self.parse_constraint(constraints, column)
+      constraints.each do |attribute, value|
+        column << send(attribute.to_s, value)
       end
     end
+
+    def self.type(value)
+      value.to_s
+    end
+
+    def self.primary_key(value)
+      "PRIMARY KEY AUTOINCREMENT" if value
+    end
+
+    def self.nullable(value)
+      "NOT NULL" unless value
+    end
+
+    def self.get_model_object(row)
+      return nil unless row
+      model_name = new
+      properties_keys.each_with_index do |key, index|
+        model_name.send("#{key}=", row[index])
+      end
+      model_name
+    end
+
+    def record_placeholders
+      (["?"] * (self.class.properties_keys.size - 1)).join(",")
+    end
+
+    def record_values
+      column_names = self.class.properties_keys
+      column_names.delete(:id)
+      column_names.map { |column_name| send(column_name) }
+    end
   end
+end

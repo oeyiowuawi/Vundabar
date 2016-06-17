@@ -10,7 +10,7 @@ module Vundabar
       request.params
     end
 
-    def redirect_to (address, status: 301)
+    def redirect_to(address, status: 301)
       response([], status, "Location" => address)
     end
 
@@ -18,7 +18,7 @@ module Vundabar
       response(render_template(*args))
     end
 
-    def response(body, status= 200, header={})
+    def response(body, status = 200, header = {})
       @response = Rack::Response.new(body, status, header)
     end
 
@@ -28,11 +28,11 @@ module Vundabar
 
     def invalid_route(endpoints)
       template = File.join(APP_ROOT, "public", "invalid_route.html.erb")
-      locals = {path: request.path_info, endpoints: endpoints}
+      locals = { path: request.path_info, endpoints: endpoints }
       Tilt::ERBTemplate.new(template).render(self, locals)
     end
 
-    def render_template view_name, locals = {}
+    def render_template(view_name, locals = {})
       layout_template, view_template = prepare_view_template(view_name)
       title = view_name.to_s.tr("_", " ").capitalize
       view_object = get_view_object
@@ -42,7 +42,13 @@ module Vundabar
     end
 
     def prepare_view_template(view_name)
-      layout_file = File.join(APP_ROOT, "app", "views", "layouts", "application.html.erb")
+      layout_file = File.join(
+        APP_ROOT,
+        "app",
+        "views",
+        "layouts",
+        "application.html.erb"
+      )
       layout_template = Tilt::ERBTemplate.new(layout_file)
       view = "#{view_name}.html.erb"
       view_template = Tilt::ERBTemplate.new(File.join(APP_ROOT, "app", "views",
@@ -62,7 +68,9 @@ module Vundabar
     def get_view_params
       hash = {}
       variables = instance_variables - [:@request]
-      variables.each { |variable| hash[variable] = instance_variable_get(variable) }
+      variables.each do  |variable|
+        hash[variable] = instance_variable_get(variable)
+      end
       hash
     end
 
@@ -70,6 +78,5 @@ module Vundabar
       klass = self.class.to_s.gsub(/Controller$/, "")
       klass.to_snake_case
     end
-
   end
 end

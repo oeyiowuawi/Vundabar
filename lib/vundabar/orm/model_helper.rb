@@ -1,87 +1,81 @@
 module Vundabar
   class ModelHelper
-    @@table = ""
-    @@properties = {}
-    @@db ||= Vundabar::Database.connect
-
-    def self.to_table(name)
-      @@table = name.to_s
+    def save
+      table = self.class.table_name
+      query = if id
+                "UPDATE #{table} SET #{update_placeholders} WHERE id = ?"
+              else
+                "INSERT INTO #{table} (#{table_columns}) VALUES "\
+                "(#{record_placeholders})"
+              end
+      values = id ? record_values << send("id") : record_values
+      self.class.db.execute query, values
     end
 
-    def self.property column_name, column_properties
-      @@properties[column_name] = column_properties
-      attr_accessor column_name
+    alias save! save
+
+    def self.all
+      query = "SELECT #{properties_keys.join(', ')} FROM #{table_name} "\
+        "ORDER BY id DESC"
+      result = db.execute query
+      result.map { |row| get_model_object(row) }
     end
 
-    def table_columns
-      columns = @@properties.keys
-      columns.delete(:id)
-      columns.map(&:to_s).join(", ")
+    def self.create(attributes)
+      object = new(attributes)
+      object.save
+      id = db.execute "SELECT last_insert_rowid()"
+      object.id = id.first.first
+      object
     end
 
-    def update_placeholders(attributes = @@properties)
-      columns = attributes.keys
-      columns.delete(:id)
-      columns.map { |column| "#{column}= ?" }.join(", ")
+    def self.count
+      result = db.execute "SELECT COUNT(*) FROM #{table_name}"
+      result.first.first
     end
 
-    def update_values(attributes)
-      attributes.values << id
-    end
-
-    def self.create_table
-      query = "CREATE TABLE IF NOT EXISTS #{@@table} (#{build_table_fields(@@properties).join(", ")})"
-      @@db.execute(query)
-    end
-
-    def self.build_table_fields(properties)
-      all_properties = []
-      properties.each do |field_name, constraints|
-        column = []
-        column << field_name.to_s
-        parse_constraint(constraints, column)
-        all_properties << column.join(" ")
-      end
-      all_properties
-    end
-
-    def self.parse_constraint(constraints, column)
-      constraints.each do |attribute, value|
-        column << send(attribute.to_s, value)
+    [%w(last DESC), %w(first ASC)].each do |method_name_and_order|
+      define_singleton_method((method_name_and_order[0]).to_s.to_sym) do
+        query = "SELECT * FROM #{table_name} ORDER BY "\
+        "id #{method_name_and_order[1]} LIMIT 1"
+        row = db.execute query
+        return nil if row.empty?
+        get_model_object(row.first)
       end
     end
 
-    def self.type(value)
-      value.to_s
+    def self.find(id)
+      query = "SELECT #{properties_keys.join(', ')} FROM #{table_name} "\
+      "WHERE id= ?"
+      row = db.execute(query, id).first
+      return nil unless row
+      get_model_object(row)
     end
 
-    def self.primary_key(value)
-      "PRIMARY KEY AUTOINCREMENT" if value
+    def update(attributes)
+      table = self.class.table_name
+      query = "UPDATE #{table} SET #{update_placeholders(attributes)}"\
+      " WHERE id= ?"
+      self.class.db.execute(query, update_values(attributes))
     end
 
-    def self.nullable(value)
-      "NOT NULL" unless value
+    def destroy
+      table = self.class.table_name
+      self.class.db.execute "DELETE FROM #{table} WHERE id= ?", id
     end
 
-    def self.get_model_object(row)
-      model_name = new
-      # if row
-        @@properties.keys.each_with_index do |key, index|
-          model_name.send("#{key}=", row[index])
-        end
-      # end
-      model_name
+    def self.destroy(id)
+      db.execute "DELETE FROM #{table_name} WHERE id= ?", id
     end
 
-    def record_placeholders
-      (["?"] * ((@@properties.keys.size) - 1)).join(",")
+    def self.destroy_all
+      db.execute "DELETE FROM #{table_name}"
     end
 
-    def record_values
-      column_names = @@properties.keys
-      column_names.delete(:id)
-      column_names.map {|column_name| send(column_name)}
+    def self.where(querry_string, value)
+      data = db.execute "SELECT #{properties_keys.join(', ')} FROM "\
+      "#{table_name} WHERE #{querry_string}", value
+      data.map { |row| get_model_object(row) }
     end
-
   end
 end
