@@ -1,4 +1,4 @@
-# Vundabar
+# Vundabar [![Code Climate](https://codeclimate.com/github/andela-oeyiowuawi/Vundabar/badges/gpa.svg)](https://codeclimate.com/github/andela-oeyiowuawi/Vundabar) [![Coverage Status](https://coveralls.io/repos/github/andela-oeyiowuawi/Vundabar/badge.svg?branch=master)](https://coveralls.io/github/andela-oeyiowuawi/Vundabar?branch=master) [![Build Status](https://travis-ci.org/andela-oeyiowuawi/Vundabar.svg?branch=master)](https://travis-ci.org/andela-oeyiowuawi/Vundabar)
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/vundabar`. To experiment with that code, run `bin/console` for an interactive prompt.
 
