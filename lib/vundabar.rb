@@ -23,7 +23,6 @@ module Vundabar
       if route
         call_controller_and_action(request, route[:klass_and_method])
       else
-        # [404, {}, ["OOOPPSSSS!!!, the path you seek is not available, Old sport "]]
         invalid_route_processor(request)
       end
     end

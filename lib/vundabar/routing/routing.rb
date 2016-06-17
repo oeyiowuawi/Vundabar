@@ -7,11 +7,11 @@ module Vundabar
       end
 
       [:get, :post, :delete, :put, :patch].each do |method|
-        define_method(method) do |path, to:|
+        define_method(method) do |path, options|
           path = "/#{path}" unless path[0] == "/"
           route_info = {
                           path: path,
-                          klass_and_method: controller_and_action(to),
+                          klass_and_method: controller_and_action(options[to:]),
                           pattern: pattern_for(path)
                        }
           endpoints[method] << route_info

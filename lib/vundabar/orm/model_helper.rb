@@ -8,7 +8,7 @@ module Vundabar
       @@table = name.to_s
     end
 
-    def self.property column_name, column_properties
+    def self.property(column_name, column_properties)
       @@properties[column_name] = column_properties
       attr_accessor column_name
     end
@@ -30,7 +30,8 @@ module Vundabar
     end
 
     def self.create_table
-      query = "CREATE TABLE IF NOT EXISTS #{@@table} (#{build_table_fields(@@properties).join(", ")})"
+      query = "CREATE TABLE IF NOT EXISTS #{@@table} "\
+        "(#{build_table_fields(@@properties).join(', ')})"
       @@db.execute(query)
     end
 
@@ -64,24 +65,22 @@ module Vundabar
     end
 
     def self.get_model_object(row)
+      return nil unless row
       model_name = new
-      # if row
-        @@properties.keys.each_with_index do |key, index|
-          model_name.send("#{key}=", row[index])
-        end
-      # end
+      @@properties.keys.each_with_index do |key, index|
+        model_name.send("#{key}=", row[index])
+      end
       model_name
     end
 
     def record_placeholders
-      (["?"] * ((@@properties.keys.size) - 1)).join(",")
+      (["?"] * (@@properties.keys.size - 1)).join(",")
     end
 
     def record_values
       column_names = @@properties.keys
       column_names.delete(:id)
-      column_names.map {|column_name| send(column_name)}
+      column_names.map { |column_name| send(column_name) }
     end
-
   end
 end

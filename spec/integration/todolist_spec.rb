@@ -1,7 +1,6 @@
 require "spec_helper"
 
 RSpec.describe "Create Todo", type: :feature do
-  
   after(:each) do
     Todo.destroy_all
   end
@@ -29,7 +28,7 @@ RSpec.describe "Create Todo", type: :feature do
 
   scenario "when deleting a todo" do
     create_list(:todo, 2)
-    todo = create(:todo, title: "Test")
+    create(:todo, title: "Test")
     visit "/"
 
     within("div#pending-todo") do
@@ -44,7 +43,6 @@ RSpec.describe "Create Todo", type: :feature do
   end
 
   scenario "when updating an existing to" do
-
     todo = Todo.create(attributes_for(:todo))
     visit "/todolist/#{todo.id}/edit"
     expect(page).to have_content "Update Task"
@@ -61,6 +59,5 @@ RSpec.describe "Create Todo", type: :feature do
     expect(page).to have_content "Status: done"
     expect(page).to have_content body
     expect(page).to have_content title
-
   end
 end

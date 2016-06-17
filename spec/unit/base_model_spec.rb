@@ -4,7 +4,7 @@ RSpec.describe Vundabar::BaseModel do
     context "when the database is not empty" do
       before(:all) do
         Todo.destroy_all
-        create_list(:todo,4)
+        create_list(:todo, 4)
       end
 
       after(:all) do
@@ -43,7 +43,12 @@ RSpec.describe Vundabar::BaseModel do
     end
 
     it "returns the newly created object" do
-      object = Todo.create(title: "Steph Curry", body: "body", status: "done", created_at: Time.now.to_s)
+      object = Todo.create(
+        title: "Steph Curry",
+        body: "body",
+        status: "done",
+        created_at: Time.now.to_s
+      )
       expect(object.title).to eq "Steph Curry"
     end
   end
@@ -135,7 +140,7 @@ RSpec.describe Vundabar::BaseModel do
       object = Todo.create(attributes_for(:todo))
       expect do
         object.destroy
-      end.to change(Todo, :count).by -1
+      end.to change(Todo, :count).by(-1)
     end
   end
 
@@ -193,17 +198,16 @@ RSpec.describe Vundabar::BaseModel do
     end
   end
   describe ".where" do
-     after(:all) do
-       Todo.destroy_all
-     end
+    after(:all) do
+      Todo.destroy_all
+    end
 
-     it "returns matching records" do
-       pending_task = create(:todo, title: "iniesta")
-       completed_todo = create(:todo, title: "Sergio")
-       expect(Todo.where("title like ?", "%iniesta").first.title).to eq(
-         pending_task.title
-       )
-
-     end
-   end
+    it "returns matching records" do
+      pending_task = create(:todo, title: "iniesta")
+      create(:todo, title: "Sergio")
+      expect(Todo.where("title like ?", "%iniesta").first.title).to eq(
+        pending_task.title
+      )
+    end
+  end
 end

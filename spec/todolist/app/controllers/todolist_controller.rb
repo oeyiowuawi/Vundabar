@@ -1,5 +1,4 @@
 class TodolistController < Vundabar::BaseController
-
   def index
     @pendings = Todo.where("status like ?", "%pending%")
     @completed = Todo.where("status like ?", "%done%")
@@ -18,9 +17,9 @@ class TodolistController < Vundabar::BaseController
   def update
     todo = Todo.find(params["id"])
     todo.update(
-    title: params["title"],
-    body: params["body"],
-    status: params["status"]
+      title: params["title"],
+      body: params["body"],
+      status: params["status"]
     )
     redirect_to "/todolist/#{todo.id}"
   end
@@ -46,6 +45,5 @@ class TodolistController < Vundabar::BaseController
       status: params["status"],
       created_at: Time.now.to_s
     }
-
   end
 end
