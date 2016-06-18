@@ -35,9 +35,8 @@ module Vundabar
     def render_template(view_name, locals = {})
       layout_template, view_template = prepare_view_template(view_name)
       title = view_name.to_s.tr("_", " ").capitalize
-      view_object = get_view_object
-      layout_template.render(view_object, title: title) do
-        view_template.render(view_object, locals)
+      layout_template.render(self, title: title) do
+        view_template.render(self, locals)
       end
     end
 
@@ -54,15 +53,6 @@ module Vundabar
       view_template = Tilt::ERBTemplate.new(File.join(APP_ROOT, "app", "views",
                                                       controller_name, view))
       [layout_template, view_template]
-    end
-
-    def get_view_object
-      Struct.new("ViewObject")
-      obj = Struct::ViewObject.new
-      get_view_params.each do |key, value|
-        obj.instance_variable_set(key, value)
-      end
-      obj
     end
 
     def get_view_params
