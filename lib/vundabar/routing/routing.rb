@@ -36,7 +36,7 @@ module Vundabar
       def pattern_for(path)
         placeholders = []
         new_path = path.gsub(/(:\w+)/) do |match|
-          placeholders << match[1..-1].freeze
+          placeholders << match[1..-1]
           "(?<#{placeholders.last}>[^?/#]+)"
         end
         [/^#{new_path}$/, placeholders]
