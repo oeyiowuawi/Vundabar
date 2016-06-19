@@ -39,8 +39,7 @@ module Vundabar
         query = "SELECT * FROM #{table_name} ORDER BY "\
         "id #{method_name_and_order[1]} LIMIT 1"
         row = db.execute query
-        return nil if row.empty?
-        get_model_object(row.first)
+        get_model_object(row.first) unless row.empty?
       end
     end
 
@@ -48,8 +47,7 @@ module Vundabar
       query = "SELECT #{properties_keys.join(', ')} FROM #{table_name} "\
       "WHERE id= ?"
       row = db.execute(query, id).first
-      return nil unless row
-      get_model_object(row)
+      get_model_object(row) if row
     end
 
     def update(attributes)
