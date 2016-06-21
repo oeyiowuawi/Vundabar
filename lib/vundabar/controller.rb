@@ -55,15 +55,6 @@ module Vundabar
       [layout_template, view_template]
     end
 
-    def get_view_params
-      hash = {}
-      variables = instance_variables - [:@request]
-      variables.each do  |variable|
-        hash[variable] = instance_variable_get(variable)
-      end
-      hash
-    end
-
     def controller_name
       klass = self.class.to_s.gsub(/Controller$/, "")
       klass.to_snake_case
