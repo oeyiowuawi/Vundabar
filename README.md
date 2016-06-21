@@ -24,9 +24,9 @@ Or install it yourself as:
 
 ## Usage
 
-When creating a new ROH app, a few things need to be setup and a few rules adhered to. ROH basically follows the same folder structure as a typical rails app with all of the model, view and controller code packed inside of an app folder, configuration based code placed inside a config folder and the main database file in a db folder.
+When creating a new Vundabar app, a few things need to be setup and a few rules adhered to. Vundabar basically follows the same folder structure as a typical rails app with all of the model, view and controller code packed inside of an app folder, configuration based code placed inside a config folder and the main database file in a db folder.
 
-View a sample app built using ROH framework [Here](https://github.com/andela-gogbara/Todo)
+View a sample app built using Vundabar framework [Here](https://github.com/andela-oeyiowuawi/Todo)
 
 ## Key Features
 
