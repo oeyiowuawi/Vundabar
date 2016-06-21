@@ -32,8 +32,15 @@ module Vundabar
       end
 
       def make_methods
-        mtds = @properties.keys.map(&:to_sym)
-        mtds.each { |mtd| attr_accessor mtd }
+        properties_keys.each do |column_name|
+          define_method(column_name) do
+            instance_variable_get("@" + column_name.to_s)
+          end
+
+          define_method("#{column_name}=") do |value|
+            instance_variable_set("@" + column_name.to_s, value)
+          end
+        end
       end
 
       def build_table_fields(properties)

@@ -15,13 +15,19 @@
             <div class="form-group">
               <label for="tasktitle">Task status</label>
               <p><select class="form-control" name="status">
+                <% if @todo.status == "pending" %>
+
                 <option value="done">Done</option>
+                <option value="pending" selected>Pending</option>
+                <% else %>
+                <option value="done" selected>Done</option>
                 <option value="pending">Pending</option>
+                <% end %>
               </select></p>
             </div>
             <div class="form-group">
               <label for="taskDescription">Task body</label>
-              <textarea class="form-control" rows="7" name="body" value="<%= @todo.body %>"></textarea>
+              <textarea class="form-control" rows="7" name="body" value= ""> <%= @todo.body %></textarea>
             </div>
             <div class="form-group text-center">
             <button type="submit" class="btn btn-info" id="update_task">Update task</button>
