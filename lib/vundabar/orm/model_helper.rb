@@ -15,7 +15,7 @@ module Vundabar
     alias save! save
 
     def self.all
-      query = "SELECT #{properties_keys.join(', ')} FROM #{table_name} "\
+      query = "SELECT * FROM #{table_name} "\
         "ORDER BY id DESC"
       result = db.execute query
       result.map { |row| get_model_object(row) }
@@ -44,7 +44,7 @@ module Vundabar
     end
 
     def self.find(id)
-      query = "SELECT #{properties_keys.join(', ')} FROM #{table_name} "\
+      query = "SELECT * FROM #{table_name} "\
       "WHERE id= ?"
       row = db.execute(query, id).first
       get_model_object(row) if row
@@ -71,7 +71,7 @@ module Vundabar
     end
 
     def self.where(querry_string, value)
-      data = db.execute "SELECT #{properties_keys.join(', ')} FROM "\
+      data = db.execute "SELECT * FROM "\
       "#{table_name} WHERE #{querry_string}", value
       data.map { |row| get_model_object(row) }
     end
