@@ -1,5 +1,6 @@
 module Vundabar
-  class BaseModel < Vundabar::ModelHelper
+  class BaseModel
+    include Vundabar::ModelHelper
     def initialize(attributes = {})
       attributes.each { |column, value| send("#{column}=", value) }
     end
