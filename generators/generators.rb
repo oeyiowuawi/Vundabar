@@ -49,7 +49,7 @@ class Vundabar::Generators < Thor
   end
 
   def add_files_to_root_folders
-    copy_file "config.ru", "config.ru"
-    copy_file "Gemfile", "Gemfile"
+    copy_file "config.ru", "#{app}/config.ru"
+    copy_file "Gemfile", "#{app}/Gemfile"
   end
 end
