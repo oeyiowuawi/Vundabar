@@ -1,6 +1,6 @@
 require 'thor'
 
-class Vundabar::Generators < thor
+class Vundabar::Generators < Thor
   include Thor::Actions
 
   def self.source_root
