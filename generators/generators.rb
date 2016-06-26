@@ -10,7 +10,7 @@ class Vundabar::Generators < Thor
   desc "server", "Starts vundabar server"
 
   def server
-    bundle exec rackup
+    exec "rackup"
   end
   map %w(s, server) => "server"
 end
