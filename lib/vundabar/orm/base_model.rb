@@ -5,6 +5,10 @@ module Vundabar
       attributes.each { |column, value| send("#{column}=", value) }
     end
 
+    class << self
+      attr_reader :properties
+    end
+
     def self.to_table(name)
       @table = name.to_s
     end
@@ -16,10 +20,6 @@ module Vundabar
     def self.property(column_name, column_properties)
       @properties ||= {}
       @properties[column_name] = column_properties
-    end
-
-    def self.properties
-      @properties
     end
 
     def self.create_table
