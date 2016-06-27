@@ -8,12 +8,12 @@ module Vundabar
       table = self.class.table_name
       query = "UPDATE #{table} SET #{update_placeholders(attributes)}"\
       " WHERE id= ?"
-      self.class.db.execute(query, update_values(attributes))
+      Database.execute_query(query, update_values(attributes))
     end
 
     def destroy
       table = self.class.table_name
-      self.class.db.execute "DELETE FROM #{table} WHERE id= ?", id
+      Database.execute_query "DELETE FROM #{table} WHERE id= ?", id
     end
 
     def save
@@ -25,7 +25,7 @@ module Vundabar
                 "(#{record_placeholders})"
               end
       values = id ? record_values << send("id") : record_values
-      self.class.db.execute query, values
+      Database.execute_query query, values
     end
 
     alias save! save
@@ -33,20 +33,20 @@ module Vundabar
       def all
         query = "SELECT * FROM #{table_name} "\
           "ORDER BY id DESC"
-        result = db.execute query
+        result = Database.execute_query query
         result.map { |row| get_model_object(row) }
       end
 
       def create(attributes)
         object = new(attributes)
         object.save
-        id = db.execute "SELECT last_insert_rowid()"
+        id = Database.execute_query "SELECT last_insert_rowid()"
         object.id = id.first.first
         object
       end
 
       def count
-        result = db.execute "SELECT COUNT(*) FROM #{table_name}"
+        result = Database.execute_query "SELECT COUNT(*) FROM #{table_name}"
         result.first.first
       end
 
@@ -54,7 +54,7 @@ module Vundabar
         define_method((method_name_and_order[0]).to_s.to_sym) do
           query = "SELECT * FROM #{table_name} ORDER BY "\
           "id #{method_name_and_order[1]} LIMIT 1"
-          row = db.execute query
+          row = Database.execute_query query
           get_model_object(row.first) unless row.empty?
         end
       end
@@ -62,20 +62,20 @@ module Vundabar
       def find(id)
         query = "SELECT * FROM #{table_name} "\
         "WHERE id= ?"
-        row = db.execute(query, id).first
+        row = Database.execute_query(query, id).first
         get_model_object(row) if row
       end
 
       def destroy(id)
-        db.execute "DELETE FROM #{table_name} WHERE id= ?", id
+        Database.execute_query "DELETE FROM #{table_name} WHERE id= ?", id
       end
 
       def destroy_all
-        db.execute "DELETE FROM #{table_name}"
+        Database.execute_query "DELETE FROM #{table_name}"
       end
 
       def where(querry_string, value)
-        data = db.execute "SELECT * FROM "\
+        data = Database.execute_query "SELECT * FROM "\
         "#{table_name} WHERE #{querry_string}", value
         data.map { |row| get_model_object(row) }
       end
