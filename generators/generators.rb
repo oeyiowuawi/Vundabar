@@ -30,6 +30,12 @@ module Vundabar
       add_files_to_root_folders
     end
 
+    desc "version", "displays the current version of the vundabar gem"
+
+    def version
+      Vundabar::Version
+    end
+    map %w(-v --version) => "version"
     private
 
     def create_views_folders
