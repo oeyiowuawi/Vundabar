@@ -4,80 +4,79 @@ module Vundabar
       base.extend ClassMethods
     end
 
-    def update(attributes)
-      table = self.class.table_name
-      query = "UPDATE #{table} SET #{update_placeholders(attributes)}"\
-      " WHERE id= ?"
-      Database.execute_query(query, update_values(attributes))
+    def table_columns
+      columns = self.class.properties.keys
+      columns.delete(:id)
+      columns.map(&:to_s).join(", ")
     end
 
-    def destroy
-      table = self.class.table_name
-      Database.execute_query "DELETE FROM #{table} WHERE id= ?", id
+    def update_placeholders(attributes = self.class.properties)
+      columns = attributes.keys
+      columns.delete(:id)
+      columns.map { |column| "#{column}= ?" }.join(", ")
     end
 
-    def save
-      table = self.class.table_name
-      query = if id
-                "UPDATE #{table} SET #{update_placeholders} WHERE id = ?"
-              else
-                "INSERT INTO #{table} (#{table_columns}) VALUES "\
-                "(#{record_placeholders})"
-              end
-      values = id ? record_values << send("id") : record_values
-      Database.execute_query query, values
+    def update_values(attributes)
+      attributes.values << id
     end
 
-    alias save! save
+    def record_placeholders
+      (["?"] * (self.class.properties.keys.size - 1)).join(",")
+    end
+
+    def record_values
+      column_names = self.class.properties.keys
+      column_names.delete(:id)
+      column_names.map { |column_name| send(column_name) }
+    end
+
     module ClassMethods
-      def all
-        query = "SELECT * FROM #{table_name} "\
-          "ORDER BY id DESC"
-        result = Database.execute_query query
-        result.map { |row| get_model_object(row) }
+      def table_name
+        @table
       end
 
-      def create(attributes)
-        object = new(attributes)
-        object.save
-        id = Database.execute_query "SELECT last_insert_rowid()"
-        object.id = id.first.first
-        object
-      end
-
-      def count
-        result = Database.execute_query "SELECT COUNT(*) FROM #{table_name}"
-        result.first.first
-      end
-
-      [%w(last DESC), %w(first ASC)].each do |method_name_and_order|
-        define_method((method_name_and_order[0]).to_s.to_sym) do
-          query = "SELECT * FROM #{table_name} ORDER BY "\
-          "id #{method_name_and_order[1]} LIMIT 1"
-          row = Database.execute_query query
-          get_model_object(row.first) unless row.empty?
+      def make_methods
+        properties.keys.each do |column_name|
+          attr_accessor column_name
         end
       end
 
-      def find(id)
-        query = "SELECT * FROM #{table_name} "\
-        "WHERE id= ?"
-        row = Database.execute_query(query, id).first
-        get_model_object(row) if row
+      def build_table_fields(properties)
+        all_properties = []
+        properties.each do |field_name, constraints|
+          column = []
+          column << field_name.to_s
+          parse_constraint(constraints, column)
+          all_properties << column.join(" ")
+        end
+        all_properties
       end
 
-      def destroy(id)
-        Database.execute_query "DELETE FROM #{table_name} WHERE id= ?", id
+      def parse_constraint(constraints, column)
+        constraints.each do |attribute, value|
+          column << send(attribute.to_s, value)
+        end
       end
 
-      def destroy_all
-        Database.execute_query "DELETE FROM #{table_name}"
+      def type(value)
+        value.to_s
       end
 
-      def where(querry_string, value)
-        data = Database.execute_query "SELECT * FROM "\
-        "#{table_name} WHERE #{querry_string}", value
-        data.map { |row| get_model_object(row) }
+      def primary_key(value)
+        "PRIMARY KEY AUTOINCREMENT" if value
+      end
+
+      def nullable(value)
+        "NOT NULL" unless value
+      end
+
+      def get_model_object(row)
+        return nil unless row
+        model_name = new
+        properties.keys.each_with_index do |key, index|
+          model_name.send("#{key}=", row[index])
+        end
+        model_name
       end
     end
   end
