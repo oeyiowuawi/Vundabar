@@ -54,12 +54,10 @@ RSpec.describe Vundabar::BaseModel do
   end
 
   describe ".count" do
-    after(:all) do
-      Todo.destroy_all
-    end
     it "returns the correct number of records in a database" do
       create_list(:todo, 2)
       expect(Todo.count).to eq 2
+      Todo.destroy_all
     end
   end
 
