@@ -33,7 +33,7 @@ module Vundabar
     desc "version", "displays the current version of the vundabar gem"
 
     def version
-      Vundabar::VERSION
+      say "#{Vundabar::VERSION}"
     end
     map %w(-v --version) => "version"
     private
