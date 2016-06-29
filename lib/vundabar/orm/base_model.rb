@@ -4,6 +4,15 @@ module Vundabar
     def initialize(attributes = {})
       attributes.each { |column, value| send("#{column}=", value) }
     end
+    private_class_method(
+      :make_methods,
+      :build_table_fields,
+      :parse_constraint,
+      :type,
+      :primary_key,
+      :nullable,
+      :get_model_object
+    )
 
     class << self
       attr_reader :properties
@@ -59,11 +68,11 @@ module Vundabar
     end
 
     def self.create(attributes)
-      object = new(attributes)
-      object.save
+      model_object = new(attributes)
+      model_object.save
       id = Database.execute_query "SELECT last_insert_rowid()"
-      object.id = id.first.first
-      object
+      model_object.id = id.first.first
+      model_object
     end
 
     def self.count
@@ -72,7 +81,7 @@ module Vundabar
     end
 
     [%w(last DESC), %w(first ASC)].each do |method_name_and_order|
-      define_singleton_method((method_name_and_order[0]).to_s.to_sym) do
+      define_singleton_method((method_name_and_order[0]).to_sym) do
         query = "SELECT * FROM #{table_name} ORDER BY "\
         "id #{method_name_and_order[1]} LIMIT 1"
         row = Database.execute_query query

@@ -50,8 +50,14 @@ module Vundabar
       )
       layout_template = Tilt::ERBTemplate.new(layout_file)
       view = "#{view_name}.html.erb"
-      view_template = Tilt::ERBTemplate.new(File.join(APP_ROOT, "app", "views",
-                                                      controller_name, view))
+      view_file = File.join(
+        APP_ROOT,
+        "app",
+        "views",
+        controller_name,
+        view
+      )
+      view_template = Tilt::ERBTemplate.new(view_file)
       [layout_template, view_template]
     end
 

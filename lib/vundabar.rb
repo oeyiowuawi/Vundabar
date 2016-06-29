@@ -7,7 +7,7 @@ require "vundabar/routing/route"
 require "vundabar/controller"
 require "pry"
 require "sqlite3"
-require "vundabar/orm/database_connector"
+require "vundabar/orm/database"
 require "vundabar/orm/model_helper"
 require "vundabar/orm/base_model"
 module Vundabar
