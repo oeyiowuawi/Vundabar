@@ -1,21 +1,22 @@
 module Vundabar
   class BaseModel
     include Vundabar::ModelHelper
+
     def initialize(attributes = {})
       attributes.each { |column, value| send("#{column}=", value) }
     end
-    private_class_method(
-      :make_methods,
-      :build_table_fields,
-      :parse_constraint,
-      :type,
-      :primary_key,
-      :nullable,
-      :get_model_object
-    )
 
     class << self
       attr_reader :properties
+      private(
+        :make_methods,
+        :build_table_fields,
+        :parse_constraint,
+        :type,
+        :primary_key,
+        :nullable,
+        :get_model_object
+      )
     end
 
     def self.to_table(name)

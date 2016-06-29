@@ -4,6 +4,8 @@ module Vundabar
       base.extend ClassMethods
     end
 
+    private
+
     def table_columns
       columns = self.class.properties.keys
       columns.delete(:id)
