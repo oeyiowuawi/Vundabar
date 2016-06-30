@@ -13,7 +13,7 @@ RSpec.describe "Todo Spec", type: :feature do
     expect(page).to have_content "Completed Todos"
   end
 
-  scenario "when a user visits the root page" do
+  scenario "when a user creates a new todo item" do
     visit "/"
     click_link "Create New Todo"
     fill_in "title", with: "Andela"
