@@ -15,11 +15,11 @@ RSpec.describe Vundabar::BaseModel do
         expect(Todo.all.count).to eq 4
       end
 
-      it "returns an array" do
+      it "returns result of type array" do
         expect(Todo.all).to be_an Array
       end
 
-      it "returns objects as elements of the array" do
+      it "returns an instance of the Todo class" do
         expect(Todo.all[0]).to be_an_instance_of Todo
         expect(Todo.all[-1]).to be_an_instance_of Todo
       end
@@ -36,7 +36,8 @@ RSpec.describe Vundabar::BaseModel do
     after(:all) do
       Todo.destroy_all
     end
-    it "saves to the database" do
+
+    it "increases the count of the records in the database" do
       expect do
         Todo.create(attributes_for(:todo))
       end.to change(Todo, :count).by 1
@@ -49,7 +50,7 @@ RSpec.describe Vundabar::BaseModel do
         status: "done",
         created_at: Time.now.to_s
       )
-      expect(object.title).to eq "Steph Curry"
+      expect(object).to be_an_instance_of Todo
     end
   end
 
@@ -66,14 +67,18 @@ RSpec.describe Vundabar::BaseModel do
       Todo.destroy_all
     end
 
-    it "returns object when an id that has a record is entered" do
-      object = create(:todo)
-      expect(Todo.find(Todo.last.id).title).to eq object.title
+    context "when an id that belongs to a record is supplied" do
+      it "returns the record that has the id " do
+        object = Todo.create(attributes_for(:todo))
+        expect(Todo.find(Todo.last.id).id).to eq object.id
+      end
     end
 
-    it "returns nil when an id with no record is entered" do
-      invalid_id = Todo.last.id + 1
-      expect(Todo.find(invalid_id)).to eq nil
+    context "when an id that has no record is supplied" do
+      it "returns nil " do
+        invalid_id = Todo.last.id + 1
+        expect(Todo.find(invalid_id)).to eq nil
+      end
     end
   end
 
@@ -83,16 +88,16 @@ RSpec.describe Vundabar::BaseModel do
     end
 
     context "when the database table is empty" do
-      it "returns nil if the table is empty" do
+      it "returns nil" do
         expect(Todo.last).to eq nil
       end
     end
 
     context "when database table is not empty" do
-      it "returns the last record of the table" do
+      it "returns the last record" do
         create_list(:todo, 2)
-        object = create(:todo, title: "Checkout")
-        expect(Todo.last.title).to eq object.title
+        last_record = create(:todo, title: "Checkout")
+        expect(Todo.last.title).to eq last_record.title
       end
     end
   end
@@ -103,30 +108,30 @@ RSpec.describe Vundabar::BaseModel do
     end
 
     context "when the database table is empty" do
-      it "returns nil if the table is empty" do
+      it "returns nil" do
         expect(Todo.first).to eq nil
       end
     end
 
     context "when database table is not empty" do
-      it "returns the last record of the table" do
-        object = create(:todo, title: "git")
+      it "returns the first record" do
+        first_record = create(:todo, title: "git")
         create_list(:todo, 2)
-        expect(Todo.first.title).to eq object.title
+        expect(Todo.first.title).to eq first_record.title
       end
     end
   end
 
   describe ".destroy" do
     it "deletes the record from the table" do
-      object = create(:todo)
-      Todo.destroy(object.id)
-      expect(Todo.find(object.id)).to eq nil
+      todo = create(:todo)
+      Todo.destroy(todo.id)
+      expect(Todo.find(todo.id)).to eq nil
     end
   end
 
   describe ".destroy_all" do
-    it "deletes every record in the database" do
+    it "deletes all the rows in the database and returns a count of 0" do
       create_list(:todo, 3)
       Todo.destroy_all
       expect(Todo.count).to eq 0
@@ -134,31 +139,32 @@ RSpec.describe Vundabar::BaseModel do
   end
 
   describe "#destroy" do
-    it "deletes the object from the database" do
-      object = Todo.create(attributes_for(:todo))
+    it "reduces the count of the database by 1" do
+      todo = Todo.create(attributes_for(:todo))
       expect do
-        object.destroy
+        todo.destroy
       end.to change(Todo, :count).by(-1)
     end
   end
 
   describe "#update" do
     before(:all) do
-      @object = Todo.create(attributes_for(:todo))
+      @todo = Todo.create(attributes_for(:todo))
     end
+
     after(:all) do
       Todo.destroy_all
     end
 
-    it "doesn't create a new record in the database" do
+    it "doesn't change the count of the records in the database" do
       expect do
-        @object.update(title: "Changed")
+        @todo.update(title: "Changed")
       end.to change(Todo, :count).by 0
     end
 
-    it "updates the object" do
-      @object.update(body: "barbosa")
-      expect(Todo.find(@object.id).body).to eq "barbosa"
+    it "updates the row" do
+      @todo.update(body: "barbosa")
+      expect(Todo.find(@todo.id).body).to eq "barbosa"
     end
   end
 
@@ -167,8 +173,8 @@ RSpec.describe Vundabar::BaseModel do
       Todo.destroy_all
     end
 
-    context "when the object has no id " do
-      it "creates a new record in the database" do
+    context "when the record has no id " do
+      it "increases the number of records in the database" do
         new_record = Todo.new(attributes_for(:todo))
         expect do
           new_record.save
@@ -176,25 +182,26 @@ RSpec.describe Vundabar::BaseModel do
       end
     end
 
-    context "when the object has an id already" do
+    context "when the record has an id already" do
       before(:all) do
         @new_record = Todo.create(attributes_for(:todo))
       end
 
-      it " doesn't create a new record" do
+      it " doesn't change the count of the records in the database" do
         @new_record.title = "test"
         expect do
           @new_record.save
         end.to change(Todo, :count).by 0
       end
 
-      it "updates the object" do
+      it "updates the record" do
         @new_record.body = "unit testing"
         @new_record.save
         expect(@new_record.body).to eq "unit testing"
       end
     end
   end
+
   describe ".where" do
     after(:all) do
       Todo.destroy_all
