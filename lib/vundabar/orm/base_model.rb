@@ -105,9 +105,9 @@ module Vundabar
       Database.execute_query "DELETE FROM #{table_name}"
     end
 
-    def self.where(querry_string, value)
+    def self.where(query_string, value)
       data = Database.execute_query "SELECT * FROM "\
-      "#{table_name} WHERE #{querry_string}", value
+      "#{table_name} WHERE #{query_string}", value
       data.map { |row| get_model_object(row) }
     end
   end
