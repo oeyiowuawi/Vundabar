@@ -1,19 +1,21 @@
 require "spec_helper"
 
-RSpec.describe "Create Todo", type: :feature do
+RSpec.describe "Todo Spec", type: :feature do
   after(:each) do
     Todo.destroy_all
   end
 
-  scenario "when a user visits the root page" do
+  scenario "when a user visits the landing page" do
     visit "/"
+
     expect(page).to have_content "Create New Todo"
     expect(page).to have_content "Pending Todos"
     expect(page).to have_content "Completed Todos"
+  end
 
+  scenario "when a user visits the root page" do
+    visit "/"
     click_link "Create New Todo"
-    expect(page).to have_content "New Task"
-
     fill_in "title", with: "Andela"
     fill_in "body", with: "The top one percent Company"
     select "Pending", from: "status"
@@ -29,11 +31,8 @@ RSpec.describe "Create Todo", type: :feature do
   scenario "when deleting a todo" do
     create_list(:todo, 2)
     create(:todo, title: "Test")
-    visit "/"
 
-    within("div#pending-todo") do
-      expect(page).to have_css("li", count: 3)
-    end
+    visit "/"
     page.all(".delete")[-1].click
 
     within("div#pending-todo") do
@@ -44,12 +43,10 @@ RSpec.describe "Create Todo", type: :feature do
 
   scenario "when updating an existing to" do
     todo = Todo.create(attributes_for(:todo))
-    visit "/todolist/#{todo.id}/edit"
-    expect(page).to have_content "Update Task"
-
     title = "Another title"
     body = "Testing update"
 
+    visit "/todolist/#{todo.id}/edit"
     fill_in "title", with: title
     fill_in "body", with: body
     select "Done", from: "status"
