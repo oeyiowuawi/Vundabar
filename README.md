@@ -1,4 +1,4 @@
-# Vundabar [![Code Climate](https://codeclimate.com/github/andela-oeyiowuawi/Vundabar/badges/gpa.svg)](https://codeclimate.com/github/andela-oeyiowuawi/Vundabar) [![Coverage Status](https://coveralls.io/repos/github/andela-oeyiowuawi/Vundabar/badge.svg?branch=master)](https://coveralls.io/github/andela-oeyiowuawi/Vundabar?branch=master) [![Build Status](https://travis-ci.org/andela-oeyiowuawi/Vundabar.svg?branch=master)](https://travis-ci.org/andela-oeyiowuawi/Vundabar)
+# Vundabar [![Code Climate](https://codeclimate.com/github/andela-oeyiowuawi/Vundabar/badges/gpa.svg)](https://codeclimate.com/github/andela-oeyiowuawi/Vundabar) [![Coverage Status](https://coveralls.io/repos/github/andela-oeyiowuawi/Vundabar/badge.svg?branch=master)](https://coveralls.io/github/andela-oeyiowuawi/Vundabar?branch=master)[![CircleCI](https://circleci.com/gh/andela-oeyiowuawi/Vundabar.svg?style=svg)](https://circleci.com/gh/andela-oeyiowuawi/Vundabar)
 
 
 Vundabar is a lightweight portable ruby web framework modelled after Rails and inspired by Sinatra. It is an attempt to understand the awesome features of Rails by reimplementing something similar from scratch.
