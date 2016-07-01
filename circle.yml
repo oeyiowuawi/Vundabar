@@ -1,5 +1,5 @@
 dependencies:
-  post:
+  pre:
     - gem install bundler
     - gem install mime-types-data -v '3.2016.0221'
 
