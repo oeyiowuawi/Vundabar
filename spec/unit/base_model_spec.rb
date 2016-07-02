@@ -82,6 +82,17 @@ RSpec.describe Vundabar::BaseModel do
     end
   end
 
+  describe ".find_by" do
+    after(:all) do
+      Todo.destroy_all
+    end
+
+    it "returns the record that has the id " do
+      object = Todo.create(attributes_for(:todo))
+      expect(Todo.find_by(id: object.id).id).to eq object.id
+    end
+  end
+
   describe ".last" do
     after(:all) do
       Todo.destroy_all

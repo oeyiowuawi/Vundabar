@@ -6,4 +6,6 @@ class Todo < Vundabar::BaseModel
   property :status, type: :text, nullable: false
   property :created_at, type: :text, nullable: false
   create_table
+
+  has_many :items
 end
