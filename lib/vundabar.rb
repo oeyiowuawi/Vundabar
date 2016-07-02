@@ -1,4 +1,5 @@
 require "vundabar/version"
+require 'active_support/inflector'
 require "vundabar/utilities"
 require "vundabar/dependencies"
 require "vundabar/routing/routing"
@@ -9,6 +10,7 @@ require "pry"
 require "sqlite3"
 require "vundabar/orm/database"
 require "vundabar/orm/model_helper"
+require "vundabar/orm/associations"
 require "vundabar/orm/base_model"
 module Vundabar
   class Application

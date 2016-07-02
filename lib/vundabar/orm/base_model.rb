@@ -1,7 +1,7 @@
 module Vundabar
   class BaseModel
     include Vundabar::ModelHelper
-
+    extend Vundabar::Associations
     def initialize(attributes = {})
       attributes.each { |column, value| send("#{column}=", value) }
     end
@@ -94,6 +94,13 @@ module Vundabar
       query = "SELECT * FROM #{table_name} "\
       "WHERE id= ?"
       row = Database.execute_query(query, id).first
+      get_model_object(row) if row
+    end
+
+    def self.find_by(option)
+      query = "SELECT * FROM #{table_name} "\
+      "WHERE #{option.keys.first}= ?"
+      row = Database.execute_query(query, option.values.first).first
       get_model_object(row) if row
     end
 
