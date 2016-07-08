@@ -19,11 +19,7 @@ module Vundabar
     def new(app_name)
       @app = app_name.downcase
       say "creating your new app #{app}"
-      empty_directory app.to_s
-      empty_directory "#{app}/app"
-      empty_directory "#{app}/app/controllers"
-      empty_directory "#{app}/app/models"
-      create_views_folders
+      create_app_directory
       create_config_files
       empty_directory "#{app}/db"
       create_public_directory
@@ -38,6 +34,14 @@ module Vundabar
     map %w(-v --version) => "version"
 
     private
+
+    def create_app_directory
+      empty_directory app.to_s
+      empty_directory "#{app}/app"
+      empty_directory "#{app}/app/controllers"
+      empty_directory "#{app}/app/models"
+      create_views_folders
+    end
 
     def create_views_folders
       empty_directory "#{app}/app/views/layouts"
