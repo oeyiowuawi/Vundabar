@@ -20,6 +20,7 @@ module Vundabar
       @app = app_name.downcase
       say "creating your new app #{app}"
       create_app_directory
+      
       create_config_files
       empty_directory "#{app}/db"
       create_public_directory
