@@ -10,6 +10,7 @@ module Vundabar
       end
     end
 
+
     def belongs_to(model_name, options = {})
       define_method(model_name) do
         class_name = model_name.to_s.singularize.capitalize
