@@ -110,6 +110,7 @@ end
 Instance variables set by the controllers are passed to the routes while rendering responses.
 
 Explicitly calling `render` to render template files is optional. If it's not called by the controller action, then it's done automatically by the framework with an argument that's the same name as the action. Thus, you can decide to call `render` explicitly when you want to render a view with a name different from the action.
+You can also use relationships similar to rails. `has_many` and `belongs_to` are available.
 
 
 ### Views
@@ -132,6 +133,15 @@ The Vundabar framework has a few dependencies. These are listed below, with link
 ## Running the tests
 
 Test files are placed inside the spec folder and have been split into two sub folders, one for unit tests and the other for integration tests. You can run the tests from your command line client by typing `rspec spec`
+## Generators
+There are a few generators available in the vundabar framework.
+
+`new` generator similar to rails is used to create the skeleton of the whole app. To use this generator, run
+`vundabar new <app_name>`.
+This will create a folder called `<app_name>` with the neccesary structure for your new app.
+`version` generator can be used to check the version of the gem that you are using.
+`server` generator can be used to start the server to your new application. To use this, run
+`vundabar server` or simply `vundabar s`.
 
 ## Development
 
@@ -141,7 +151,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ##Limitations
 
-This version of the gem does not support model relationships, implement callbacks, support migration generation and generating schema.
+This version of the gem does not implement callbacks, support migration generation and generating schema.
 
 ## Contributing
 
