@@ -22,6 +22,9 @@ module Vundabar
     def call(env)
       request = Rack::Request.new(env)
       route = mapper.find_route(request)
+      # return invalid_route_processor(request) unless route
+      # call_controller_and_action(request, route[:klass_and_method])
+      #
       if route
         call_controller_and_action(request, route[:klass_and_method])
       else
